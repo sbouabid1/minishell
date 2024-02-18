@@ -6,11 +6,25 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 11:21:14 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/18 12:28:56 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/18 20:01:46 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	check_if_builtins(t_node *curr)
+{
+	if (strcmp(curr->command, "echo") == 0)
+		return (1);
+	return(0);
+}
+
+void	builtins(int index, t_node *curr)
+{
+	if (index == 1)
+		echo(curr);
+}
+
 
 void	execute_cmds(t_node **node, char **env)
 {
@@ -19,46 +33,88 @@ void	execute_cmds(t_node **node, char **env)
 	int	pid;
 	int	status;
 	t_node *curr;
+	int fdtmp = dup(1);
 
 	curr = *node;
 	temp = -1;
 	while (curr != NULL)
 	{
 		pipe(fd);
-		pid = fork();
-		if (pid == 0)
+		if (check_if_builtins(curr) == 0)
 		{
-			if (curr->next == NULL)
+			pid = fork();
+			if (pid == 0)
 			{
-				close(fd[1]);
-				dup2(temp, STDIN_FILENO);
-				close(fd[0]);
-				close(temp);
-				if (execve(curr->command, curr->arg, env) == -1)
-					printf("Synatx Error\n");
+				if (curr->next == NULL)
+				{
+					close(fd[1]);
+					dup2(temp, STDIN_FILENO);
+					close(fd[0]);
+					close(temp);
+					if (execve(curr->path, curr->arg, env) == -1)
+						printf("Synatx Error\n");
+				}
+				else if (temp == -1)
+				{
+					close(fd[0]);
+					dup2(fd[1], STDOUT_FILENO);
+					close(fd[1]);
+					if (execve(curr->path, curr->arg, env) == -1)
+						printf("Synatx Error\n");
+				}
+				else
+				{
+					dup2(fd[1], STDOUT_FILENO);
+					close(fd[1]);
+					close(fd[0]);
+					dup2(temp, STDIN_FILENO);
+					close(temp);
+					if (execve(curr->path, curr->arg, env) == -1)
+						printf("command not found: %s\n", curr->command);
+				}
 			}
-			else if (temp == -1)
+			else{
+				printf("fd[0] %d\n", fd[0]);
+				printf("fd[1] %d\n", fd[1]);
+				printf("temp %d\n", temp);
+				close(fd[1]);
+				if (temp != -1)
+					close(temp);
+				temp = fd[0];
+					write(fdtmp, "here\n", 5);
+				if (curr->next == NULL) {
+
+					write(fdtmp, "here2\n", 6);
+					close(fd[0]);
+					close(temp);
+				}
+			}
+		}
+		else if (check_if_builtins(curr) != 0 && curr->next == NULL)
+		{
+			close(fd[1]);
+			close(fd[0]);
+			close(temp);
+			builtins(check_if_builtins(curr), curr);
+		}
+		else if (check_if_builtins(curr) != 0 && curr->next != NULL)
+		{
+			pid = fork();
+			if (pid == 0)
 			{
 				close(fd[0]);
 				dup2(fd[1], STDOUT_FILENO);
 				close(fd[1]);
-				if (execve(curr->command, curr->arg, env) == -1)
-					printf("Synatx Error\n");
+				builtins(check_if_builtins(curr), curr);
 			}
 			else
 			{
-				dup2(fd[1], STDOUT_FILENO);
+				// printf("fd[0] %d\n", fd[0]);
+				// printf("fd[1] %d\n", fd[1]);
+				// printf("temp: %d\n", temp);
 				close(fd[1]);
-				close(fd[0]);
-				dup2(temp, STDIN_FILENO);
-				close(temp);
-				if (execve(curr->command, curr->arg, env) == -1)
-					printf("Synatx Error\n");
+				temp = fd[0];
 			}
-		}
-		else{
-			close(fd[1]);
-			temp = fd[0];
 		}
 		curr = curr->next;
 	}

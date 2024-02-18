@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 10:30:17 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/18 12:25:02 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/18 13:22:23 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ t_node	*ft_lstnew(char *ptr)
 		free(node);
 		return NULL;
 	}
-	node->command = strdup(path);
+	node->command = str[0];
+	node->path = strdup(path);
 	node->arg = str;
 	node->next = NULL;
 	return (node);
