@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 10:30:17 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/18 10:00:07 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/18 12:25:02 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_lstadd_back(t_node **lst, t_node *new)
 		*lst = new;
 		return ;
 	}
- 	while (temp->next != NULL)
+	while (temp->next != NULL)
 	{
 		temp = temp->next;
 	}

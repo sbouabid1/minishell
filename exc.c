@@ -6,13 +6,13 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 11:21:14 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/17 12:53:30 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/18 12:28:56 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute_cmds(t_node **node)
+void	execute_cmds(t_node **node, char **env)
 {
 	int	temp;
 	int	fd[2];
@@ -34,7 +34,7 @@ void	execute_cmds(t_node **node)
 				dup2(temp, STDIN_FILENO);
 				close(fd[0]);
 				close(temp);
-				if (execve(curr->command, curr->arg, NULL) == -1)
+				if (execve(curr->command, curr->arg, env) == -1)
 					printf("Synatx Error\n");
 			}
 			else if (temp == -1)
@@ -42,7 +42,7 @@ void	execute_cmds(t_node **node)
 				close(fd[0]);
 				dup2(fd[1], STDOUT_FILENO);
 				close(fd[1]);
-				if (execve(curr->command, curr->arg, NULL) == -1)
+				if (execve(curr->command, curr->arg, env) == -1)
 					printf("Synatx Error\n");
 			}
 			else
@@ -52,7 +52,7 @@ void	execute_cmds(t_node **node)
 				close(fd[0]);
 				dup2(temp, STDIN_FILENO);
 				close(temp);
-				if (execve(curr->command, curr->arg, NULL) == -1)
+				if (execve(curr->command, curr->arg, env) == -1)
 					printf("Synatx Error\n");
 			}
 		}

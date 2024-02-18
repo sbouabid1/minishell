@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:12 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/17 11:21:40 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/18 12:28:13 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ typedef struct s_node
 
 
 
-void	execute_cmd(char *buff);
+void	execute(char *buff, char **env);
 char	**ft_split(char const *s, char c);
 char	*getCommandPath(const char *command);
 void	ft_lstadd_back(t_node **lst, t_node *new);
 t_node	*ft_lstnew(char *ptr);
-void	execute_cmds(t_node **node);
+void	execute_cmds(t_node **node, char **env);
 
 
 
