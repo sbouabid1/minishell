@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 11:21:14 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/18 20:01:46 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/19 09:56:01 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	execute_cmds(t_node **node, char **env)
 	int	pid;
 	int	status;
 	t_node *curr;
-	int fdtmp = dup(1);
 
 	curr = *node;
 	temp = -1;
@@ -73,18 +72,14 @@ void	execute_cmds(t_node **node, char **env)
 						printf("command not found: %s\n", curr->command);
 				}
 			}
-			else{
-				printf("fd[0] %d\n", fd[0]);
-				printf("fd[1] %d\n", fd[1]);
-				printf("temp %d\n", temp);
+			else
+			{
 				close(fd[1]);
 				if (temp != -1)
 					close(temp);
 				temp = fd[0];
-					write(fdtmp, "here\n", 5);
-				if (curr->next == NULL) {
-
-					write(fdtmp, "here2\n", 6);
+				if (curr->next == NULL)
+				{
 					close(fd[0]);
 					close(temp);
 				}
@@ -109,9 +104,6 @@ void	execute_cmds(t_node **node, char **env)
 			}
 			else
 			{
-				// printf("fd[0] %d\n", fd[0]);
-				// printf("fd[1] %d\n", fd[1]);
-				// printf("temp: %d\n", temp);
 				close(fd[1]);
 				temp = fd[0];
 			}
@@ -121,3 +113,4 @@ void	execute_cmds(t_node **node, char **env)
 	while ((pid = waitpid(-1, &status, 0) != -1));
 	close(temp);
 }
+
