@@ -6,16 +6,24 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 11:21:14 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/19 09:56:01 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:58:05 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+
+
 int	check_if_builtins(t_node *curr)
 {
 	if (strcmp(curr->command, "echo") == 0)
 		return (1);
+	if (strcmp(curr->command, "cd") == 0)
+		return (2);
+	if (strcmp(curr->command, "pwd") == 0)
+		return (3);
+	if (strcmp(curr->command, "exit") == 0)
+		return (4);
 	return(0);
 }
 
@@ -23,6 +31,16 @@ void	builtins(int index, t_node *curr)
 {
 	if (index == 1)
 		echo(curr);
+	else if (index == 2 )
+		cd(curr);
+	else if (index == 3 )
+		pwd();
+	else if (index == 4 )
+	{
+		printf("exit\n");
+		exit(0);
+	}
+
 }
 
 
@@ -34,6 +52,11 @@ void	execute_cmds(t_node **node, char **env)
 	int	status;
 	t_node *curr;
 
+	if (strcmp(curr->command, "exit") == 0)
+	{
+		printf("exit\n");
+		exit(0);
+	}
 	curr = *node;
 	temp = -1;
 	while (curr != NULL)
@@ -51,7 +74,7 @@ void	execute_cmds(t_node **node, char **env)
 					close(fd[0]);
 					close(temp);
 					if (execve(curr->path, curr->arg, env) == -1)
-						printf("Synatx Error\n");
+						printf("command not found: %s\n", curr->command);
 				}
 				else if (temp == -1)
 				{
@@ -59,7 +82,7 @@ void	execute_cmds(t_node **node, char **env)
 					dup2(fd[1], STDOUT_FILENO);
 					close(fd[1]);
 					if (execve(curr->path, curr->arg, env) == -1)
-						printf("Synatx Error\n");
+						printf("command not found: %s\n", curr->command);
 				}
 				else
 				{
@@ -101,6 +124,7 @@ void	execute_cmds(t_node **node, char **env)
 				dup2(fd[1], STDOUT_FILENO);
 				close(fd[1]);
 				builtins(check_if_builtins(curr), curr);
+				exit(0);
 			}
 			else
 			{
@@ -108,6 +132,7 @@ void	execute_cmds(t_node **node, char **env)
 				temp = fd[0];
 			}
 		}
+
 		curr = curr->next;
 	}
 	while ((pid = waitpid(-1, &status, 0) != -1));

@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 13:20:58 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/18 18:32:47 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:40:36 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,22 @@ void	echo(t_node *node)
 	if (node->arg[1] == NULL || (strcmp(node->arg[1], "-n") != 0))
 		ft_putchar('\n');
 }
+
+void	cd(t_node *node)
+{
+	if (node->arg[2] != NULL)
+		printf("string not in pwd: %s\n", node->arg[1]);
+    if (chdir(node->arg[1]) != 0) {
+		printf("string not in pwd: %s\n", node->arg[1]);
+    }
+}
+
+void	pwd()
+{
+	char buffer[1024];
+
+	getcwd(buffer, 1024);
+	printf("%s\n", buffer);
+}
+
 

@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 10:30:17 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/18 13:22:23 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:55:04 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,11 @@ t_node	*ft_lstnew(char *ptr)
 	if (!node)
 		return (NULL);
 	path = getCommandPath(str[0]);
-	if (path == NULL)
-	{
-		printf("command not found: %s\n", str[0]);
-		free(node);
-		return NULL;
-	}
 	node->command = str[0];
-	node->path = strdup(path);
+	if (path == NULL)
+		node->path = strdup("");
+	else
+		node->path = strdup(path);
 	node->arg = str;
 	node->next = NULL;
 	return (node);

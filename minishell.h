@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:12 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/18 13:42:10 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/19 14:11:55 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <readline/readline.h>
+#include <readline/history.h>
 
 typedef struct s_node
 {
@@ -38,6 +39,8 @@ void	execute_cmds(t_node **node, char **env);
 
 /*builtins*/
 void	echo(t_node *node);
+void	cd(t_node *node);
+void	pwd(void);
 
 
 #endif
