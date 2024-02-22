@@ -6,12 +6,11 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 11:21:14 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/19 15:58:05 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/22 13:35:01 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 
 int	check_if_builtins(t_node *curr)
@@ -24,10 +23,14 @@ int	check_if_builtins(t_node *curr)
 		return (3);
 	if (strcmp(curr->command, "exit") == 0)
 		return (4);
+	if (strcmp(curr->command, "env") == 0)
+		return (5);
+	if (strcmp(curr->command, "export") == 0)
+		return (6);
 	return(0);
 }
 
-void	builtins(int index, t_node *curr)
+void	builtins(int index, t_node *curr, t_env **env)
 {
 	if (index == 1)
 		echo(curr);
@@ -40,24 +43,34 @@ void	builtins(int index, t_node *curr)
 		printf("exit\n");
 		exit(0);
 	}
+	else if (index == 5)
+	{
+		print_env(env);
+	}
+	else if (index == 6)
+	{
+		
+	}
 
 }
 
 
-void	execute_cmds(t_node **node, char **env)
+void	execute_cmds(t_node **node, char **env, t_env **env_head)
 {
 	int	temp;
 	int	fd[2];
 	int	pid;
 	int	status;
+	int	file_fd;
 	t_node *curr;
 
+	file_fd = open("file.txt", O_RDWR);
+	curr = *node;
 	if (strcmp(curr->command, "exit") == 0)
 	{
 		printf("exit\n");
 		exit(0);
 	}
-	curr = *node;
 	temp = -1;
 	while (curr != NULL)
 	{
@@ -75,6 +88,7 @@ void	execute_cmds(t_node **node, char **env)
 					close(temp);
 					if (execve(curr->path, curr->arg, env) == -1)
 						printf("command not found: %s\n", curr->command);
+						exit(0);
 				}
 				else if (temp == -1)
 				{
@@ -82,7 +96,10 @@ void	execute_cmds(t_node **node, char **env)
 					dup2(fd[1], STDOUT_FILENO);
 					close(fd[1]);
 					if (execve(curr->path, curr->arg, env) == -1)
+					{
 						printf("command not found: %s\n", curr->command);
+						exit(0);
+					}
 				}
 				else
 				{
@@ -93,6 +110,7 @@ void	execute_cmds(t_node **node, char **env)
 					close(temp);
 					if (execve(curr->path, curr->arg, env) == -1)
 						printf("command not found: %s\n", curr->command);
+						exit(0);
 				}
 			}
 			else
@@ -113,7 +131,7 @@ void	execute_cmds(t_node **node, char **env)
 			close(fd[1]);
 			close(fd[0]);
 			close(temp);
-			builtins(check_if_builtins(curr), curr);
+			builtins(check_if_builtins(curr), curr, env_head);
 		}
 		else if (check_if_builtins(curr) != 0 && curr->next != NULL)
 		{
@@ -123,7 +141,7 @@ void	execute_cmds(t_node **node, char **env)
 				close(fd[0]);
 				dup2(fd[1], STDOUT_FILENO);
 				close(fd[1]);
-				builtins(check_if_builtins(curr), curr);
+				builtins(check_if_builtins(curr), curr, env_head);
 				exit(0);
 			}
 			else
@@ -132,10 +150,10 @@ void	execute_cmds(t_node **node, char **env)
 				temp = fd[0];
 			}
 		}
-
 		curr = curr->next;
 	}
 	while ((pid = waitpid(-1, &status, 0) != -1));
 	close(temp);
+	close(file_fd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 13:20:58 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/19 15:40:36 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/22 13:36:10 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,7 @@ void	pwd()
 	printf("%s\n", buffer);
 }
 
+void	export(t_env	**head, char *env)
+{
 
+}
