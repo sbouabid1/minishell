@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:12 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/22 12:32:38 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:38:38 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,6 @@ void	execute_cmds(t_node **node, char **env, t_env **env_head);
 void	echo(t_node *node);
 void	cd(t_node *node);
 void	pwd(void);
-
+void	export(t_env	**head, t_node *node);
 
 #endif

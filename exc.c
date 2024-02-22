@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 11:21:14 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/22 13:35:01 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:34:15 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	builtins(int index, t_node *curr, t_env **env)
 	}
 	else if (index == 6)
 	{
-		
+		export(env, curr);
 	}
 
 }
@@ -61,10 +61,8 @@ void	execute_cmds(t_node **node, char **env, t_env **env_head)
 	int	fd[2];
 	int	pid;
 	int	status;
-	int	file_fd;
 	t_node *curr;
 
-	file_fd = open("file.txt", O_RDWR);
 	curr = *node;
 	if (strcmp(curr->command, "exit") == 0)
 	{
@@ -154,6 +152,5 @@ void	execute_cmds(t_node **node, char **env, t_env **env_head)
 	}
 	while ((pid = waitpid(-1, &status, 0) != -1));
 	close(temp);
-	close(file_fd);
 }
 
