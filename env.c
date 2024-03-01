@@ -6,46 +6,52 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:28:27 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/22 11:23:50 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:08:51 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*new_env(char *env)
+int	count_len(char	*str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] !=  '=')
+		i++;
+	return (i);
+}
+
+t_env	*new_env(char	*arg)
 {
 	t_env	*new;
-	char	**sp;
+	char	**values;
+	char	*temp;
 
-	new = malloc(sizeof(t_env) * 1);
-	if (!new)
+	new = malloc(sizeof(t_env));
+	if (new == NULL)
 		return (NULL);
-	sp = ft_split(env, '=');
-	if (sp == NULL)
-	{
-		free(new);
-		return(NULL);
-	}
-	new->name = sp[0];
-	new->value = sp[1];
-	new->env = env;
-	new->next = NULL;
+	new->name = ft_substr(arg, 0, count_len(arg));
+	temp = strchr(arg, '=');
+	if (temp != NULL)
+		new->value = strdup(temp + 1);
 	return (new);
 }
 
-void	add_env(t_env	**head, t_env *new)
+void	add_env(t_env **env_head, t_env *new)
 {
 	t_env	*curr;
 
-	curr = *head;
-	if (*head == NULL)
-		*head = new;
-	else
+	if (*env_head == NULL)
 	{
-		while (curr->next != NULL)
-			curr = curr->next;
-		curr->next = new;
+		*env_head = new;
+		return ;
 	}
+	curr = *env_head;
+	while (curr->next)
+		curr = curr->next;
+	curr->next = new;
+
 }
 
 void remove_env(t_env **head, char *target)
@@ -76,14 +82,3 @@ void remove_env(t_env **head, char *target)
 	free(curr);
 }
 
-void	print_env(t_env **env)
-{
-	t_env	*curr;
-
-	curr = *env;
-	while (curr)
-	{
-		printf("%s\n", curr->env);
-		curr = curr->next;
-	}
-}

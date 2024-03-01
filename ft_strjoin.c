@@ -1,33 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute.c                                          :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/13 11:29:57 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/29 11:27:00 by sbouabid         ###   ########.fr       */
+/*   Created: 2023/11/01 15:18:08 by sbouabid          #+#    #+#             */
+/*   Updated: 2024/02/27 16:54:54 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute(char *buff, char **env, t_env **env_head)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	t_node	*head;
-	char	**cmd;
-	int		i;
+	int		s1_len;
+	int		s2_len;
+	char	*ptr;
 
-	i = 0;
-	cmd = ft_split(buff, '|');
-	if (cmd == NULL)
-		return ;
-	head = NULL;
-	while (cmd[i])
-	{
-		ft_lstadd_back(&head, ft_lstnew(cmd[i]));
-		i++;
-	}
-	i = 0;
-	execute_cmds(&head, env, env_head);
+	if (s1 == NULL || s2 == NULL)
+		return (NULL);
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	ptr = malloc(s1_len + s2_len + 1);
+	if (!ptr)
+		return (NULL);
+	ft_strlcpy(ptr, s1, s1_len + 1);
+	ft_strlcat(ptr, s2, s2_len + s1_len + 1);
+	return (ptr);
 }

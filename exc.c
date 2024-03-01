@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 11:21:14 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/22 14:34:15 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:30:15 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,15 @@ int	check_if_builtins(t_node *curr)
 		return (2);
 	if (strcmp(curr->command, "pwd") == 0)
 		return (3);
-	if (strcmp(curr->command, "exit") == 0)
-		return (4);
 	if (strcmp(curr->command, "env") == 0)
-		return (5);
+		return (4);
 	if (strcmp(curr->command, "export") == 0)
-		return (6);
+		return (5);
+
 	return(0);
 }
 
-void	builtins(int index, t_node *curr, t_env **env)
+void	builtins(int index, t_node *curr, t_env **env_head)
 {
 	if (index == 1)
 		echo(curr);
@@ -39,21 +38,10 @@ void	builtins(int index, t_node *curr, t_env **env)
 	else if (index == 3 )
 		pwd();
 	else if (index == 4 )
-	{
-		printf("exit\n");
-		exit(0);
-	}
-	else if (index == 5)
-	{
-		print_env(env);
-	}
-	else if (index == 6)
-	{
-		export(env, curr);
-	}
-
+		ft_env(env_head);
+	else if (index == 5 )
+		export(curr, env_head);
 }
-
 
 void	execute_cmds(t_node **node, char **env, t_env **env_head)
 {

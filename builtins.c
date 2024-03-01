@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 13:20:58 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/22 14:53:52 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:30:09 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,29 +67,16 @@ void	pwd()
 	printf("%s\n", buffer);
 }
 
-int	valid_env(char *env)
-{
-	int	i;
-
-	while (env[i] && env[i] != '=')
-		i++;
-	if (!env[i])
-		return (0);
-	else if (!env[i + 1])
-		return (0);
-	else
-		return (1);
-}
-
-void	export(t_env	**head, t_node *node)
+void	ft_env(t_env **envs)
 {
 	int		i;
+	t_env	*curr;
 
+	curr = *envs;
 	i = 0;
-	while (node->arg[i])
+	while (curr)
 	{
-		if (valid_env(node->arg[i]))
-			add_env(head, new_env(node->arg[i]));
-		i++;
+		printf("%s=%s\n", curr->name, curr->value);
+		curr = curr->next;
 	}
 }
