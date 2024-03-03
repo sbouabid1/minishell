@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 13:20:58 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/01 17:30:09 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/02 17:51:10 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,44 @@ void	ft_env(t_env **envs)
 	{
 		printf("%s=%s\n", curr->name, curr->value);
 		curr = curr->next;
+	}
+}
+
+void	remove_env(t_env **head, char *target)
+{
+	t_env	*curr;
+	t_env	*prev;
+
+	if (*head == NULL)
+		return;
+	curr = *head;
+	prev = NULL;
+	if (strcmp(curr->name, target) == 0)
+	{
+		*head = (*head)->next;
+		free(curr);
+		return;
+	}
+	while (curr != NULL && strcmp(curr->name, target) != 0)
+	{
+		prev = curr;
+		curr = curr->next;
+	}
+	if (curr == NULL)
+		return;
+	prev->next = curr->next;
+	free(curr);
+}
+
+
+void	ft_unset(t_env **head, t_node *node)
+{
+	int	i;
+
+	i = 1;
+	while (node->arg[i])
+	{
+		remove_env(head, node->arg[i]);
+		i++;
 	}
 }

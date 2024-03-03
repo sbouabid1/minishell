@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 11:21:14 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/01 17:30:15 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/02 12:44:46 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int	check_if_builtins(t_node *curr)
 		return (4);
 	if (strcmp(curr->command, "export") == 0)
 		return (5);
+	if (strcmp(curr->command, "unset") == 0)
+		return (6);
 
 	return(0);
 }
@@ -41,6 +43,8 @@ void	builtins(int index, t_node *curr, t_env **env_head)
 		ft_env(env_head);
 	else if (index == 5 )
 		export(curr, env_head);
+	else if (index == 6 )
+		ft_unset(env_head, curr);
 }
 
 void	execute_cmds(t_node **node, char **env, t_env **env_head)

@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:28:27 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/01 17:08:51 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/02 12:41:03 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,47 +38,22 @@ t_env	*new_env(char	*arg)
 	return (new);
 }
 
-void	add_env(t_env **env_head, t_env *new)
+void add_env(t_env **env_head, t_env *new)
 {
 	t_env	*curr;
 
+	if (new == NULL)
+		return;
+	new->next = NULL;
 	if (*env_head == NULL)
 	{
 		*env_head = new;
-		return ;
+		return;
 	}
 	curr = *env_head;
-	while (curr->next)
+	while (curr->next != NULL)
 		curr = curr->next;
 	curr->next = new;
-
 }
 
-void remove_env(t_env **head, char *target)
-{
-	t_env	*curr;
-	t_env	*prev;
-
-	if (*head == NULL)
-		return;
-	curr = *head;
-	prev = NULL;
-	if (strcmp(curr->name, target) == 0)
-	{
-		*head = (*head)->next;
-		free(curr);
-		return;
-	}
-
-	while (curr != NULL && strcmp(curr->name, target) == 0)
-	{
-		prev = curr;
-		curr = curr->next;
-	}
-
-	if (curr == NULL)
-		return;
-	prev->next = curr->next;
-	free(curr);
-}
 

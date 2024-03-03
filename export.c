@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:55:58 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/01 17:30:24 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/02 12:21:14 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,73 @@ int	existing(t_env	**env, char *arg)
 	return (0);
 }
 
+void swap(t_env *a, t_env *b) {
+	char *temp_name = a->name;
+	char *temp_value = a->value;
+
+	a->name = b->name;
+	a->value = b->value;
+
+	b->name = temp_name;
+	b->value = temp_value;
+}
+
+void sortList(t_env *head) {
+	int swapped;
+	t_env *ptr1;
+	t_env *lptr = NULL;
+
+	if (head == NULL)
+		return;
+
+	do {
+		swapped = 0;
+		ptr1 = head;
+
+		while (ptr1->next != lptr) {
+			if (strcmp(ptr1->name, ptr1->next->name) > 0) {
+				swap(ptr1, ptr1->next);
+				swapped = 1;
+			}
+			ptr1 = ptr1->next;
+		}
+		lptr = ptr1;
+	} while (swapped);
+}
+
+void copyList(t_env *source, t_env **destination) {
+	while (source != NULL) {
+		t_env *newNode = malloc(sizeof(t_env));
+		newNode->name = strdup(source->name);
+		newNode->value = strdup(source->value);
+		newNode->next = NULL;
+
+		if (*destination == NULL) {
+			*destination = newNode;
+		} else {
+			t_env *current = *destination;
+			while (current->next != NULL) {
+				current = current->next;
+			}
+			current->next = newNode;
+		}
+		source = source->next;
+	}
+}
+
 void	export(t_node *node, t_env **env)
 {
 	int	i;
+	t_env	*new;
 
 	if (node->arg[1] == NULL)
 	{
-		ft_env(env);
+		new = NULL;
+		copyList(*env, &new);
+		sortList(new);
+		ft_env(&new);
+		// print_list();
+		// free_list();
 	}
 	i = 1;
 	while (node->arg[i])
@@ -78,4 +138,3 @@ void	export(t_node *node, t_env **env)
 		i++;
 	}
 }
-
