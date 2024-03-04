@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:55:58 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/02 12:21:14 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:53:46 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,11 @@ void sortList(t_env *head) {
 }
 
 void copyList(t_env *source, t_env **destination) {
-	while (source != NULL) {
+	while (source != NULL)
+	{
 		t_env *newNode = malloc(sizeof(t_env));
+		if (!newNode)
+			return ;
 		newNode->name = strdup(source->name);
 		newNode->value = strdup(source->value);
 		newNode->next = NULL;
@@ -110,6 +113,33 @@ void copyList(t_env *source, t_env **destination) {
 	}
 }
 
+void freeList(t_env **head)
+{
+	t_env *current;
+	t_env *next;
+
+	current = *head;
+	while (current != NULL) {
+		next = current->next;
+		free(current->name);
+		free(current->value);
+		free(current);
+		current = next;
+	}
+}
+
+void	print_sopted_env(t_env **env)
+{
+	t_env	*curr;
+
+	curr = *env;
+	while (curr)
+	{
+		printf("declare -x %s=%s\n", curr->name, curr->value);
+		curr = curr->next;
+	}
+}
+
 void	export(t_node *node, t_env **env)
 {
 	int	i;
@@ -120,9 +150,8 @@ void	export(t_node *node, t_env **env)
 		new = NULL;
 		copyList(*env, &new);
 		sortList(new);
-		ft_env(&new);
-		// print_list();
-		// free_list();
+		print_sopted_env(&new);
+		freeList(&new);
 	}
 	i = 1;
 	while (node->arg[i])

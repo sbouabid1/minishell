@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:12 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/03 16:17:43 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/03 17:49:52 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef	struct s_memory
 void	*ft_malloc(size_t size, t_memory **head);
 void	ft_free(t_memory **head);
 
-void	execute(char *buff, char **env, t_env **env_head);
+void	execute(char *buff, char **env, t_env **env_head, t_memory **memory);
 char	**ft_split(char const *s, char c);
 char	*getCommandPath(const char *command);
 void	ft_lstadd_back(t_node **lst, t_node *new);

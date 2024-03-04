@@ -6,13 +6,13 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 11:29:57 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/29 11:27:00 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:15:08 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute(char *buff, char **env, t_env **env_head)
+void	execute(char *buff, char **env, t_env **env_head, t_memory **memory)
 {
 	t_node	*head;
 	char	**cmd;

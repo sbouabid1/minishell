@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 11:23:27 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/01 17:09:03 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/03 20:12:19 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,18 @@ void	full_env(char **env, t_env **env_head)
 	}
 }
 
+void	f()
+{
+	system("leaks shell");
+}
+
 int	main(int arc, char **arv, char **env)
 {
-	char	*buff;
-	t_env	*env_head;
+	char		*buff;
+	t_env		*env_head;
+	t_memory	memory;
 
+	// atexit(f);
 	env_head = NULL;
 	full_env(env, &env_head);
 	while (1)
@@ -37,6 +44,6 @@ int	main(int arc, char **arv, char **env)
 		if (buff[0] == '\0')
 			continue;
 		add_history(buff);
-		execute(buff, env, &env_head);
+		execute(buff, env, &env_head, &memory);
 	}
 }
