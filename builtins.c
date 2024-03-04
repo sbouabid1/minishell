@@ -108,13 +108,28 @@ void	remove_env(t_env **head, char *target)
 }
 
 
-void	ft_unset(t_env **head, t_node *node)
+void	ft_unset(t_env **head, t_node *node, char **env)
 {
 	int	i;
+	int	j;
 
 	i = 1;
+	j = 0;
 	while (node->arg[i])
 	{
+		if (strcmp(node->arg[i], "PATH") == 0)
+		{
+			while (env[i])
+			{
+				if (strncmp(env[j], "PATH=", 5) == 0)
+				{
+					env[j] = strdup("  ");
+					break;
+				}
+				j++;
+			}
+
+		}
 		remove_env(head, node->arg[i]);
 		i++;
 	}

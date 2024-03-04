@@ -38,6 +38,17 @@ typedef	struct s_env
 t_env	*new_env(char	*arg);
 void	add_env(t_env **env_head, t_env *new);
 
+typedef	struct s_var
+{
+	int	i;
+	char	**paths;
+	char	*env;
+	char	*join1;
+	char	*join2;
+	int		result;
+}	t_var;
+
+
 typedef	struct s_memory
 {
 	void	*address;
@@ -46,20 +57,21 @@ typedef	struct s_memory
 void	*ft_malloc(size_t size, t_memory **head);
 void	ft_free(t_memory **head);
 
-void	execute(char *buff, char **env, t_env **env_head, t_memory **memory);
+void	execute(char *buff, char **env, t_env **env_head);
 char	**ft_split(char const *s, char c);
-char	*getCommandPath(const char *command);
+char	*getCommandPath(char *command, char **env);
 void	ft_lstadd_back(t_node **lst, t_node *new);
-t_node	*ft_lstnew(char *ptr);
+t_node	*ft_lstnew(char *ptr, char **env);
 void	execute_cmds(t_node **node, char **env, t_env **env_head);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 int		count_len(char	*str);
-
+char	*ft_strjoin(char const *s1, char const *s2);
+void	free_arr(char **arr);
 /*builtins*/
 void	echo(t_node *node);
 void	cd(t_node *node);
 void	pwd(void);
 void	ft_env(t_env **envs);
-void	export(t_node *node, t_env **env);
-void	ft_unset(t_env **head, t_node *curr);
+void	export(t_node *node, t_env **env, char **envs);
+void	ft_unset(t_env **head, t_node *curr, char **env);
 #endif

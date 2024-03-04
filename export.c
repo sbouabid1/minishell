@@ -140,8 +140,9 @@ void	print_sopted_env(t_env **env)
 	}
 }
 
-void	export(t_node *node, t_env **env)
+void	export(t_node *node, t_env **env, char **envs)
 {
+	int	j;
 	int	i;
 	t_env	*new;
 
@@ -158,6 +159,20 @@ void	export(t_node *node, t_env **env)
 	{
 		if (check_if_valied(node->arg[i]) == 1)
 			return ;
+		if (strncmp(node->arg[i], "PATH=", 5) == 0)
+		{
+			j = 0;
+			while (envs[j])
+			{
+				if (strcmp(envs[j], "  ") == 0)
+				{
+					free(envs[j]);
+					envs[j] = strdup(node->arg[i]);
+					break;
+				}
+				j++;
+			}
+		}
 		if (existing(env, node->arg[i]) == 1)
 		{
 			i++;

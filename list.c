@@ -31,7 +31,8 @@ void	ft_lstadd_back(t_node **lst, t_node *new)
 	temp->next = new;
 }
 
-t_node	*ft_lstnew(char *ptr)
+
+t_node	*ft_lstnew(char *ptr, char **env)
 {
 	t_node	*node;
 	char	*path;
@@ -40,7 +41,7 @@ t_node	*ft_lstnew(char *ptr)
 	node = malloc(sizeof(t_node));
 	if (!node)
 		return (NULL);
-	path = getCommandPath(str[0]);
+	path = getCommandPath(str[0], env);
 	node->command = str[0];
 	if (path == NULL)
 		node->path = strdup("");

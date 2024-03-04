@@ -12,6 +12,24 @@
 
 #include "minishell.h"
 
+void	put_error(char *mesg, char *command)
+{
+	int	i;
+
+	i = 0;
+	while (mesg[i])
+	{
+		write(2, &mesg[i], 1);
+		i++;
+	}
+	i = 0;
+	while (command[i])
+	{
+		write(2, &command[i], 1);
+		i++;
+	}
+	write(2, "\n", 1);
+}
 
 int	check_if_builtins(t_node *curr)
 {
@@ -31,7 +49,7 @@ int	check_if_builtins(t_node *curr)
 	return(0);
 }
 
-void	builtins(int index, t_node *curr, t_env **env_head)
+void	builtins(int index, t_node *curr, t_env **env_head, char **env)
 {
 	if (index == 1)
 		echo(curr);
@@ -42,9 +60,9 @@ void	builtins(int index, t_node *curr, t_env **env_head)
 	else if (index == 4 )
 		ft_env(env_head);
 	else if (index == 5 )
-		export(curr, env_head);
+		export(curr, env_head, env);
 	else if (index == 6 )
-		ft_unset(env_head, curr);
+		ft_unset(env_head, curr, env);
 }
 
 void	execute_cmds(t_node **node, char **env, t_env **env_head)
@@ -77,7 +95,7 @@ void	execute_cmds(t_node **node, char **env, t_env **env_head)
 					close(fd[0]);
 					close(temp);
 					if (execve(curr->path, curr->arg, env) == -1)
-						printf("command not found: %s\n", curr->command);
+						put_error("command not found: ", curr->command);
 						exit(0);
 				}
 				else if (temp == -1)
@@ -87,7 +105,7 @@ void	execute_cmds(t_node **node, char **env, t_env **env_head)
 					close(fd[1]);
 					if (execve(curr->path, curr->arg, env) == -1)
 					{
-						printf("command not found: %s\n", curr->command);
+						put_error("command not found: ", curr->command);
 						exit(0);
 					}
 				}
@@ -99,7 +117,7 @@ void	execute_cmds(t_node **node, char **env, t_env **env_head)
 					dup2(temp, STDIN_FILENO);
 					close(temp);
 					if (execve(curr->path, curr->arg, env) == -1)
-						printf("command not found: %s\n", curr->command);
+						put_error("command not found: ", curr->command);
 						exit(0);
 				}
 			}
@@ -121,7 +139,7 @@ void	execute_cmds(t_node **node, char **env, t_env **env_head)
 			close(fd[1]);
 			close(fd[0]);
 			close(temp);
-			builtins(check_if_builtins(curr), curr, env_head);
+			builtins(check_if_builtins(curr), curr, env_head, env);
 		}
 		else if (check_if_builtins(curr) != 0 && curr->next != NULL)
 		{
@@ -131,7 +149,7 @@ void	execute_cmds(t_node **node, char **env, t_env **env_head)
 				close(fd[0]);
 				dup2(fd[1], STDOUT_FILENO);
 				close(fd[1]);
-				builtins(check_if_builtins(curr), curr, env_head);
+				builtins(check_if_builtins(curr), curr, env_head, env);
 				exit(0);
 			}
 			else

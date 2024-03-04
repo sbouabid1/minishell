@@ -11,11 +11,11 @@
 # **************************************************************************** #
 
 CC = cc
-SRCF = main.c execute.c ft_split.c temp.c list.c exc.c builtins.c env.c ft_substr.c export.c
+SRCF = main.c execute.c ft_split.c temp.c list.c exc.c builtins.c env.c ft_substr.c export.c ft_strjoin.c
 OBJF = $(SRCF:.c=.o)
 RM  = rm -f
-NAME = shell
-CFLAGS = #-fsanitize=address -g #-Wall -Wextra -Werror
+NAME = minishell
+CFLAGS = -fsanitize=address -g #-Wall -Wextra -Werror
 
 all: $(NAME)
 

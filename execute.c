@@ -12,7 +12,8 @@
 
 #include "minishell.h"
 
-void	execute(char *buff, char **env, t_env **env_head, t_memory **memory)
+
+void	execute(char *buff, char **env, t_env **env_head)
 {
 	t_node	*head;
 	char	**cmd;
@@ -25,9 +26,10 @@ void	execute(char *buff, char **env, t_env **env_head, t_memory **memory)
 	head = NULL;
 	while (cmd[i])
 	{
-		ft_lstadd_back(&head, ft_lstnew(cmd[i]));
+		ft_lstadd_back(&head, ft_lstnew(cmd[i], env));
 		i++;
 	}
 	i = 0;
 	execute_cmds(&head, env, env_head);
+	free_arr(cmd);
 }
