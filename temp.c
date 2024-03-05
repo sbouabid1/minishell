@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 11:04:41 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/17 11:11:39 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:11:40 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,13 @@ char	*find_path(char **env)
 	return (NULL);
 }
 
-char *getCommandPath(char *command, char **env)
+char	*get_command_path(char *command, char **env)
 {
 	t_var	var;
 
 	var.i = 0;
 	if (command[0] == '/')
 		return (strdup(command));
-	// var.env = getenv("PATH");
 	var.env = find_path(env);
 	if (var.env == NULL)
 		return (NULL);
@@ -66,5 +65,5 @@ char *getCommandPath(char *command, char **env)
 		var.i++;
 	}
 	free_arr(var.paths);
-	return NULL;
+	return (NULL);
 }

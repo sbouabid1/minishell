@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 15:18:08 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/27 16:54:54 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:09:22 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 
 	srcsize = ft_strlen(src);
 	if (dstsize == 0)
-		return (srcsize); 
+		return (srcsize);
 	i = 0;
 	while (i < dstsize - 1 && src[i])
 	{

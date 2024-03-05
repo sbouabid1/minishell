@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 10:30:17 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/02/19 15:55:04 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:11:11 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_node	*ft_lstnew(char *ptr, char **env)
 	node = malloc(sizeof(t_node));
 	if (!node)
 		return (NULL);
-	path = getCommandPath(str[0], env);
+	path = get_command_path(str[0], env);
 	node->command = str[0];
 	if (path == NULL)
 		node->path = strdup("");

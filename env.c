@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:28:27 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/02 12:41:03 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:08:47 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	count_len(char	*str)
 	int	i;
 
 	i = 0;
-	while (str[i] && str[i] !=  '=')
+	while (str[i] && str[i] != '=')
 		i++;
 	return (i);
 }
@@ -38,22 +38,20 @@ t_env	*new_env(char	*arg)
 	return (new);
 }
 
-void add_env(t_env **env_head, t_env *new)
+void	add_env(t_env **env_head, t_env *new)
 {
 	t_env	*curr;
 
 	if (new == NULL)
-		return;
+		return ;
 	new->next = NULL;
 	if (*env_head == NULL)
 	{
 		*env_head = new;
-		return;
+		return ;
 	}
 	curr = *env_head;
 	while (curr->next != NULL)
 		curr = curr->next;
 	curr->next = new;
 }
-
-

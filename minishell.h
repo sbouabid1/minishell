@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:12 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/03 17:49:52 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:11:22 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ typedef	struct s_var
 	char	*join1;
 	char	*join2;
 	int		result;
+
+	int	temp;
+	int	fd[2];
+	int	pid;
+	int	status;
 }	t_var;
 
 
@@ -59,7 +64,7 @@ void	ft_free(t_memory **head);
 
 void	execute(char *buff, char **env, t_env **env_head);
 char	**ft_split(char const *s, char c);
-char	*getCommandPath(char *command, char **env);
+char	*get_command_path(char *command, char **env);
 void	ft_lstadd_back(t_node **lst, t_node *new);
 t_node	*ft_lstnew(char *ptr, char **env);
 void	execute_cmds(t_node **node, char **env, t_env **env_head);
@@ -74,4 +79,22 @@ void	pwd(void);
 void	ft_env(t_env **envs);
 void	export(t_node *node, t_env **env, char **envs);
 void	ft_unset(t_env **head, t_node *curr, char **env);
+
+/*pipes*/
+void	condition3(t_var *var, t_node *curr, char **env, t_env **env_head);
+void	builtins(int index, t_node *curr, t_env **env_head, char **env);
+int		check_if_builtins(t_node *curr);
+void	put_error(char *mesg, char *command);
+void	check_condition(t_var *var, t_node *curr, char **env, t_env **env_head);
+void	not_bultins(t_var *var, t_node *curr, char **env, t_env **env_head);
+void	double_command(t_var *var, t_node *curr, char **env, t_env **env_head);
+void	startexec(t_node *curr, char **env, t_env **env_head, t_var *var);
+void	execute_cmds(t_node **node, char **env, t_env **env_head);
+
+/*export*/
+void	swap(t_env *a, t_env *b);
+void	sort_list(t_env *head);
+void	copy_list(t_env *source, t_env **destination);
+void	free_list(t_env **head);
+void	print_sorted_env(t_env **env);
 #endif

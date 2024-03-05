@@ -48,7 +48,7 @@ int	main(int arc, char **arv, char **env)
 	char		*buff;
 	t_env		*env_head;
 
-	if (env == NULL)
+	if (env[0] == NULL)
 	{
 		gives_value(&env);
 	}
