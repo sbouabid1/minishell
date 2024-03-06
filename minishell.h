@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:12 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/05 17:11:22 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/05 20:58:36 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,15 @@ typedef	struct s_env
 }	t_env;
 t_env	*new_env(char	*arg);
 void	add_env(t_env **env_head, t_env *new);
-
 typedef	struct s_var
 {
 	int	i;
+	int	j;
 	char	**paths;
 	char	*env;
 	char	*join1;
 	char	*join2;
 	int		result;
-
 	int	temp;
 	int	fd[2];
 	int	pid;
@@ -79,7 +78,7 @@ void	pwd(void);
 void	ft_env(t_env **envs);
 void	export(t_node *node, t_env **env, char **envs);
 void	ft_unset(t_env **head, t_node *curr, char **env);
-
+void	ft_exit();
 /*pipes*/
 void	condition3(t_var *var, t_node *curr, char **env, t_env **env_head);
 void	builtins(int index, t_node *curr, t_env **env_head, char **env);
@@ -90,6 +89,7 @@ void	not_bultins(t_var *var, t_node *curr, char **env, t_env **env_head);
 void	double_command(t_var *var, t_node *curr, char **env, t_env **env_head);
 void	startexec(t_node *curr, char **env, t_env **env_head, t_var *var);
 void	execute_cmds(t_node **node, char **env, t_env **env_head);
+void	check_condition(t_var *var, t_node *curr, char **env, t_env **env_head);
 
 /*export*/
 void	swap(t_env *a, t_env *b);

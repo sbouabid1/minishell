@@ -6,40 +6,11 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 11:21:14 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/05 16:29:15 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/05 21:00:21 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	check_condition(t_var *var, t_node *curr, char **env, t_env **env_head)
-{
-	if (curr->next == NULL)
-	{
-		close(var->fd[1]);
-		dup2(var->temp, STDIN_FILENO);
-		close(var->fd[0]);
-		close(var->temp);
-		if (execve(curr->path, curr->arg, env) == -1)
-		{
-			put_error("command not found: ", curr->command);
-			exit(0);
-		}
-	}
-	else if (var->temp == -1)
-	{
-		close(var->fd[0]);
-		dup2(var->fd[1], STDOUT_FILENO);
-		close(var->fd[1]);
-		if (execve(curr->path, curr->arg, env) == -1)
-		{
-			put_error("command not found: ", curr->command);
-			exit(0);
-		}
-	}
-	else
-		condition3(var, curr, env, env_head);
-}
 
 void	not_bultins(t_var *var, t_node *curr, char **env, t_env **env_head)
 {
@@ -87,17 +58,30 @@ void	startexec(t_node *curr, char **env, t_env **env_head, t_var *var)
 	{
 		not_bultins(var, curr, env, env_head);
 	}
-	else if (check_if_builtins(curr) != 0 && curr->next == NULL)
+	else if (check_if_builtins(curr) != 0 && curr->next == NULL && var->j != 1)
 	{
 		close(var->fd[1]);
 		close(var->fd[0]);
 		close(var->temp);
-		builtins(check_if_builtins(curr), curr, env_head, env);
+		var->pid = fork();
+		if (var->pid == 0)
+		{
+			builtins(check_if_builtins(curr), curr, env_head, env);
+			exit(0);
+		}
 	}
+	else if (check_if_builtins(curr) != 0 && curr->next == NULL && var->j == 1)
+		builtins(check_if_builtins(curr), curr, env_head, env);
 	else if (check_if_builtins(curr) != 0 && curr->next != NULL)
 	{
 		double_command(var, curr, env, env_head);
 	}
+}
+
+void	ft_exit(void)
+{
+	printf("exit\n");
+	exit(0);
 }
 
 void	execute_cmds(t_node **node, char **env, t_env **env_head)
@@ -106,11 +90,9 @@ void	execute_cmds(t_node **node, char **env, t_env **env_head)
 	t_node	*curr;
 
 	curr = *node;
-	if (strcmp(curr->command, "exit") == 0)
-	{
-		printf("exit\n");
-		exit(0);
-	}
+	var.j = 0;
+	if (curr->next == NULL)
+		var.j = 1;
 	var.temp = -1;
 	while (curr != NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:20:39 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/05 16:33:08 by sbouabid         ###   ########.fr       */
+/*   Updated: 2024/03/05 20:56:52 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	check_if_builtins(t_node *curr)
 		return (5);
 	if (strcmp(curr->command, "unset") == 0)
 		return (6);
+	if (strcmp(curr->command, "exit") == 0)
+		return (7);
 	return (0);
 }
 
@@ -62,6 +64,8 @@ void	builtins(int index, t_node *curr, t_env **env_head, char **env)
 		export(curr, env_head, env);
 	else if (index == 6)
 		ft_unset(env_head, curr, env);
+	else if (index == 7)
+		ft_exit();
 }
 
 void	condition3(t_var *var, t_node *curr, char **env, t_env **env_head)
@@ -76,4 +80,33 @@ void	condition3(t_var *var, t_node *curr, char **env, t_env **env_head)
 		put_error("command not found: ", curr->command);
 		exit(0);
 	}
+}
+
+void	check_condition(t_var *var, t_node *curr, char **env, t_env **env_head)
+{
+	if (curr->next == NULL)
+	{
+		close(var->fd[1]);
+		dup2(var->temp, STDIN_FILENO);
+		close(var->fd[0]);
+		close(var->temp);
+		if (execve(curr->path, curr->arg, env) == -1)
+		{
+			put_error("command not found: ", curr->command);
+			exit(0);
+		}
+	}
+	else if (var->temp == -1)
+	{
+		close(var->fd[0]);
+		dup2(var->fd[1], STDOUT_FILENO);
+		close(var->fd[1]);
+		if (execve(curr->path, curr->arg, env) == -1)
+		{
+			put_error("command not found: ", curr->command);
+			exit(0);
+		}
+	}
+	else
+		condition3(var, curr, env, env_head);
 }
