@@ -6,7 +6,7 @@
 /*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 13:48:19 by touahman          #+#    #+#             */
-/*   Updated: 2024/03/06 11:22:06 by touahman         ###   ########.fr       */
+/*   Updated: 2024/03/08 17:56:28 by touahman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	delete_node(t_plist **list)
 	while (current != NULL)
 	{
 		next = current->next;
-		if (strcmp(current->str, "\"\"") == 0)
+		if (ft_strcmp(current->str, "\"\"") == 0)
 		{
 			delete_node_from_list(list, current);
 		}

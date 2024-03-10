@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:28:27 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/06 11:25:32 by touahman         ###   ########.fr       */
+/*   Updated: 2024/03/09 14:20:52 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ t_env	*new_env(char	*arg)
 	new = malloc(sizeof(t_env));
 	if (new == NULL)
 		return (NULL);
-	new->name = ft_substr(arg, 0, count_len(arg));
-	temp = strchr(arg, '=');
+	new->name = ft_substr(arg, 0, ex_count_len(arg));
+	temp = ft_strchr(arg, '=');
 	if (temp != NULL)
-		new->value = strdup(temp + 1);
+		new->value = ft_strdup(temp + 1);
 	return (new);
 }
 

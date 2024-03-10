@@ -6,7 +6,7 @@
 /*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 13:37:13 by touahman          #+#    #+#             */
-/*   Updated: 2024/03/06 11:21:48 by touahman         ###   ########.fr       */
+/*   Updated: 2024/03/09 17:48:28 by touahman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	add_spaces_back(t_dblst *list)
 			j = 0;
 			while (temp->arg[i][j])
 			{
-				if (temp->arg[i][j] == -32 || temp->arg[i][j] == -124)
+				if (temp->arg[i][j] < 0)
 				{
 					temp->arg[i][j] *= -1;
 				}

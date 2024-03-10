@@ -6,7 +6,7 @@
 /*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 12:07:10 by touahman          #+#    #+#             */
-/*   Updated: 2024/03/06 15:41:19 by touahman         ###   ########.fr       */
+/*   Updated: 2024/03/09 14:52:36 by touahman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ static void	count_length(t_plist *list, t_index *index)
 	head = list->head;
 	while (head != NULL)
 	{
-		if ((strcmp(head->str, ">") == 0 || strcmp(head->str, "<") == 0
-				|| strcmp(head->str, ">>") == 0 || strcmp(head->str, "<<") == 0)
+		if ((ft_strcmp(head->str, ">") == 0 || ft_strcmp(head->str, "<") == 0
+				|| ft_strcmp(head->str, ">>") == 0
+				|| ft_strcmp(head->str, "<<") == 0)
 			&& head->next)
 		{
 			head = head->next;
@@ -29,7 +30,7 @@ static void	count_length(t_plist *list, t_index *index)
 		}
 		else if (head && head->str)
 		{
-			index->len += strlen(head->str) + 1;
+			index->len += ft_strlen(head->str) + 1;
 			head = head->next;
 		}
 	}
@@ -42,8 +43,9 @@ static char	*create_exec_line(t_plist *list, t_index *index)
 	head = list->head;
 	while (head != NULL)
 	{
-		if ((strcmp(head->str, ">") == 0 || strcmp(head->str, "<") == 0 ||
-				strcmp(head->str, ">>") == 0 || strcmp(head->str, "<<") == 0)
+		if ((ft_strcmp(head->str, ">") == 0 || ft_strcmp(head->str, "<") == 0
+				|| ft_strcmp(head->str, ">>") == 0
+				|| ft_strcmp(head->str, "<<") == 0)
 			&& head->next)
 		{
 			head = head->next;
@@ -52,8 +54,8 @@ static char	*create_exec_line(t_plist *list, t_index *index)
 		}
 		else
 		{
-			strcpy(index->result + index->i, head->str);
-			index->i += strlen(head->str);
+			ft_strcpy(index->result + index->i, head->str);
+			index->i += ft_strlen(head->str);
 			index->result[index->i++] = ' ';
 			head = head->next;
 		}
@@ -66,7 +68,7 @@ char	*exec_line(t_plist *list)
 {
 	t_index	index;
 
-	memset(&index, 0, sizeof(index));
+	ft_memset(&index, 0, sizeof(index));
 	if (list->head == NULL)
 		return (NULL);
 	count_length(list, &index);

@@ -6,7 +6,7 @@
 /*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 15:10:52 by touahman          #+#    #+#             */
-/*   Updated: 2024/03/06 17:43:08 by touahman         ###   ########.fr       */
+/*   Updated: 2024/03/08 17:59:12 by touahman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ int	fix_input(char *line)
 		if (line[i] == '"')
 			inside_quotes = !inside_quotes;
 		if (!inside_quotes && line[i] == '|' && line[i + 1] == '|')
-			return (printf("Syntax error!\n"), 0);
+			return (printf("bash: syntax error near unexpected token\n"), 0);
 		else if (!inside_quotes && line[i] == '|' && line[i + 1] == '\0')
-			return (printf("Syntax error!\n"), 0);
+			return (printf("bash: syntax error near unexpected token\n"), 0);
 		else if (line[i] == '>' && line[i + 1] == ' ' && line[i + 2] == '>')
-			return (printf("Syntax error!\n"), 0);
+			return (printf("bash: syntax error near unexpected token\n"), 0);
 		else if (line[i] == '<' && line[i + 1] == ' ' && line[i + 2] == '<')
-			return (printf("Syntax error!\n"), 0);
+			return (printf("bash: syntax error near unexpected token\n"), 0);
 		i++;
 	}
 	return (1);
@@ -57,7 +57,7 @@ int	check_quotes(char *input)
 		i++;
 	}
 	if (singlequotes % 2 != 0 || doublequotes % 2 != 0)
-		return (printf("Syntax error!\n"), 0);
+		return (printf("bash: unclosed quote!\n"), 0);
 	return (1);
 }
 
@@ -86,9 +86,9 @@ static int	has_invalid_sequence(t_pnode *node)
 
 static int	has_unexpected_token(t_pnode *node)
 {
-	if (strcmp(node->str, "|") == 0 || strcmp(node->str, ">>") == 0
-		|| strcmp(node->str, "<<") == 0 || strcmp(node->str, ">") == 0
-		|| strcmp(node->str, "!") == 0 || strcmp(node->str, "<") == 0)
+	if (ft_strcmp(node->str, "|") == 0 || ft_strcmp(node->str, ">>") == 0
+		|| ft_strcmp(node->str, "<<") == 0 || ft_strcmp(node->str, ">") == 0
+		|| ft_strcmp(node->str, "!") == 0 || ft_strcmp(node->str, "<") == 0)
 	{
 		if (node->next == NULL)
 			return (1);
@@ -101,7 +101,7 @@ int	check_syntax(t_plist *list)
 	t_pnode	*head;
 
 	head = list->head;
-	if (strcmp(head->str, "|") == 0 && head->next->type == STRING)
+	if (ft_strcmp(head->str, "|") == 0 && head->next->type == STRING)
 		return (printf("bash: syntax error near unexpected token\n"), 1);
 	while (head)
 	{

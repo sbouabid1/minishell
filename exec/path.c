@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   temp.c                                             :+:      :+:    :+:   */
+/*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 11:04:41 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/06 11:20:18 by touahman         ###   ########.fr       */
+/*   Updated: 2024/03/09 14:34:31 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*find_path(char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (strncmp("PATH=", env[i], 5) == 0)
+		if (ft_strncmp("PATH=", env[i], 5) == 0)
 			return (env[i]);
 		i++;
 	}
@@ -45,7 +45,7 @@ char	*get_command_path(char *command, char **env)
 
 	var.i = 0;
 	if (command[0] == '/')
-		return (strdup(command));
+		return (ft_strdup(command));
 	var.env = find_path(env);
 	if (var.env == NULL)
 		return (NULL);
@@ -66,4 +66,11 @@ char	*get_command_path(char *command, char **env)
 	}
 	free_arr(var.paths);
 	return (NULL);
+}
+
+void	free_curr(t_env *curr)
+{
+	free(curr->name);
+	free(curr->value);
+	free(curr);
 }

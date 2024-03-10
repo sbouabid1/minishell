@@ -3,32 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   builtins2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sbouabid <sbouabid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:13:44 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/06 11:19:52 by touahman         ###   ########.fr       */
+/*   Updated: 2024/03/09 14:33:27 by sbouabid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/header.h"
 
-void	cd(t_node *node)
+int	cd(t_node *node)
 {
-	if (node->arg[2] != NULL)
-		printf("string not in pwd: %s\n", node->arg[1]);
+	if (node->arg[1] != NULL)
+	{
+		if (node->arg[2] != NULL)
+		{
+			printf("string not in pwd: %s\n", node->arg[1]);
+			return (1);
+		}
+	}
+	else if (node->arg[1] == NULL)
+	{
+		chdir(getenv("HOME"));
+		return (0);
+	}
 	if (chdir(node->arg[1]) != 0)
-		printf("string not in pwd: %s\n", node->arg[1]);
+	{
+		printf("lstring not in pwd: %s\n", node->arg[1]);
+		return (1);
+	}
+	return (0);
 }
 
-void	pwd(void)
+int	pwd(t_node *node)
 {
 	char	buffer[1024];
 
-	getcwd(buffer, 1024);
-	printf("%s\n", buffer);
+	if (!getcwd(buffer, 1024))
+	{
+		return (1);
+	}
+	ft_putstr_fd(buffer, node->fd_out);
+	ft_putchar_fd('\n', node->fd_out);
+	return (0);
 }
 
-void	ft_env(t_env **envs)
+int	ft_env(t_env **envs, t_node *node)
 {
 	int		i;
 	t_env	*curr;
@@ -37,9 +57,13 @@ void	ft_env(t_env **envs)
 	i = 0;
 	while (curr)
 	{
-		printf("%s=%s\n", curr->name, curr->value);
+		ft_putstr_fd(curr->name, node->fd_out);
+		ft_putchar_fd('=', node->fd_out);
+		ft_putstr_fd(curr->value, node->fd_out);
+		ft_putchar_fd('\n', node->fd_out);
 		curr = curr->next;
 	}
+	return (0);
 }
 
 void	remove_env(t_env **head, char *target)
@@ -51,13 +75,13 @@ void	remove_env(t_env **head, char *target)
 		return ;
 	curr = *head;
 	prev = NULL;
-	if (strcmp(curr->name, target) == 0)
+	if (ft_strcmp(curr->name, target) == 0)
 	{
 		*head = (*head)->next;
-		free(curr);
+		free_curr(curr);
 		return ;
 	}
-	while (curr != NULL && strcmp(curr->name, target) != 0)
+	while (curr != NULL && ft_strcmp(curr->name, target) != 0)
 	{
 		prev = curr;
 		curr = curr->next;
@@ -65,10 +89,10 @@ void	remove_env(t_env **head, char *target)
 	if (curr == NULL)
 		return ;
 	prev->next = curr->next;
-	free(curr);
+	free_curr(curr);
 }
 
-void	ft_unset(t_env **head, t_node *node, char **env)
+int	ft_unset(t_env **head, t_node *node, char **env)
 {
 	int	i;
 	int	j;
@@ -77,13 +101,13 @@ void	ft_unset(t_env **head, t_node *node, char **env)
 	j = 0;
 	while (node->arg[i])
 	{
-		if (strcmp(node->arg[i], "PATH") == 0)
+		if (ft_strcmp(node->arg[i], "PATH") == 0)
 		{
 			while (env[i])
 			{
-				if (strncmp(env[j], "PATH=", 5) == 0)
+				if (ft_strncmp(env[j], "PATH=", 5) == 0)
 				{
-					env[j] = strdup("  ");
+					env[j] = ft_strdup("  ");
 					break ;
 				}
 				j++;
@@ -92,4 +116,5 @@ void	ft_unset(t_env **head, t_node *node, char **env)
 		remove_env(head, node->arg[i]);
 		i++;
 	}
+	return (0);
 }

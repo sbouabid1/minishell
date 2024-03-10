@@ -6,7 +6,7 @@
 /*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 14:38:38 by touahman          #+#    #+#             */
-/*   Updated: 2024/03/06 11:50:12 by touahman         ###   ########.fr       */
+/*   Updated: 2024/03/09 17:43:11 by touahman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,42 +34,52 @@ void	gives_value(char ***env)
 	(*env)[4] = NULL;
 }
 
-void	runner(t_dblst *list, char *line, char **env, t_env **env_head)
+void	runner(t_dblst *list, t_index *index, int *status)
 {
 	t_node	*head;
+	char	*line;
 
+	line = NULL;
 	list->head = NULL;
 	list->tail = NULL;
-	line = readline("~$ ");
+	line = NULL;
+	line = readline("minishell::$ ");
+	if (!line)
+	{
+		printf("exit\n");
+		exit(0);
+	}
 	if (line)
 	{
-		add_history(line);
-		if (lexer(line, list, env) != 1)
+		if (*line != '\0')
+			add_history(line);
+		if (lexer(line, list, index, status) != 1)
 		{
 			head = list->head;
-			execute_cmds(&head, env, env_head);
+			execute_cmds(&head, index->env, index->env_head, status);
 		}
 	}
+	free_list(list);
+	free(line);
 }
 
 int	main(int argc, char **argv, char **env)
 {
-	t_dblst	list;
-	char	*line;
-	t_env	*env_head;
+	t_dblst		list;
+	t_env		*env_head;
+	static int	status;
+	t_index		index;
 
-	(void)argc;
 	(void)argv;
+	(void)argc;
+	status = 0;
 	if (env[0] == NULL)
 		gives_value(&env);
 	env_head = NULL;
-	line = NULL;
 	full_env(env, &env_head);
+	index.env = env;
+	index.env_head = &env_head;
 	handle_signals();
 	while (1)
-	{
-		runner(&list, line, env, &env_head);
-		free_list(&list);
-		free(line);
-	}
+		runner(&list, &index, &status);
 }

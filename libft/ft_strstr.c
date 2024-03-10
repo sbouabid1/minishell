@@ -1,28 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_striteri.c                                      :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: touahman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/05 20:38:40 by touahman          #+#    #+#             */
-/*   Updated: 2023/11/05 20:38:41 by touahman         ###   ########.fr       */
+/*   Created: 2024/03/09 14:59:41 by touahman          #+#    #+#             */
+/*   Updated: 2024/03/09 15:00:27 by touahman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_striteri(char *s, void (*f)(unsigned int, char *))
+char	*ft_strstr(char *str, char *to_find)
 {
-	unsigned int	i;
+	char	*s1;
+	char	*s2;
 
-	i = 0;
-	if (s == NULL || f == NULL)
-		return ;
-	while (*s)
+	if (*to_find == '\0')
+		return (str);
+	while (*str)
 	{
-		f(i, s);
-		i++;
-		s++;
+		s1 = str;
+		s2 = to_find;
+		while (*s1 && *s2 && *s1 == *s2)
+		{
+			s1++;
+			s2++;
+		}
+		if (*s2 == '\0')
+			return (str);
+		str++;
 	}
+	return (0);
 }

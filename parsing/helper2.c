@@ -6,7 +6,7 @@
 /*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 16:58:39 by touahman          #+#    #+#             */
-/*   Updated: 2024/03/06 11:21:52 by touahman         ###   ########.fr       */
+/*   Updated: 2024/03/09 15:00:31 by touahman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	str_len(char *str)
 	int	i;
 	int	inquotes;
 
-	len = strlen(str);
+	len = ft_strlen(str);
 	newlen = len;
 	i = 0;
 	inquotes = 0;

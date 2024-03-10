@@ -6,7 +6,7 @@
 /*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:55:58 by sbouabid          #+#    #+#             */
-/*   Updated: 2024/03/06 11:25:19 by touahman         ###   ########.fr       */
+/*   Updated: 2024/03/09 14:55:39 by touahman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,22 @@ int	existing(t_env	**env, char *arg)
 
 	curr = *env;
 	name = ft_substr(arg, 0, ex_count_len(arg));
-	value = strchr(arg, '=');
+	value = ft_strchr(arg, '=');
 	while (curr)
 	{
-		if (strcmp(curr->name, name) == 0)
+		if (ft_strcmp(curr->name, name) == 0)
 		{
 			if (value != NULL)
 			{
 				free(curr->value);
-				curr->value = strdup(value + 1);
+				curr->value = ft_strdup(value + 1);
 				free(name);
 				return (1);
 			}
 		}
 		curr = curr->next;
 	}
+	free(name);
 	return (0);
 }
 
@@ -61,15 +62,15 @@ void	check_path(t_node *node, t_env **env, char **envs, int i)
 	int	j;
 
 	(void)env;
-	if (strncmp(node->arg[i], "PATH=", 5) == 0)
+	if (ft_strncmp(node->arg[i], "PATH=", 5) == 0)
 	{
 		j = 0;
 		while (envs[j])
 		{
-			if (strcmp(envs[j], "  ") == 0)
+			if (ft_strcmp(envs[j], "  ") == 0)
 			{
 				free(envs[j]);
-				envs[j] = strdup(node->arg[i]);
+				envs[j] = ft_strdup(node->arg[i]);
 				break ;
 			}
 			j++;
@@ -77,12 +78,12 @@ void	check_path(t_node *node, t_env **env, char **envs, int i)
 	}
 }
 
-void	exporter(t_node *node, t_env **env, char **envs, int i)
+int	exporter(t_node *node, t_env **env, char **envs, int i)
 {
 	while (node->arg[i])
 	{
 		if (check_if_valied(node->arg[i]) == 1)
-			return ;
+			return (1);
 		check_path(node, env, envs, i);
 		if (existing(env, node->arg[i]) == 1)
 		{
@@ -92,21 +93,25 @@ void	exporter(t_node *node, t_env **env, char **envs, int i)
 		add_env(env, new_env(node->arg[i]));
 		i++;
 	}
+	return (0);
 }
 
-void	export(t_node *node, t_env **env, char **envs)
+int	export(t_node *node, t_env **env, char **envs)
 {
 	int		i;
 	t_env	*new;
+	int		value;
 
 	if (node->arg[1] == NULL)
 	{
 		new = NULL;
 		copy_list(*env, &new);
 		sort_list(new);
-		print_sorted_env(&new);
+		print_sorted_env(&new, node);
 		exfree_list(&new);
+		return (0);
 	}
 	i = 1;
-	exporter(node, env, envs, i);
+	value = exporter(node, env, envs, i);
+	return (value);
 }

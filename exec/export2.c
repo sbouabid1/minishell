@@ -41,7 +41,7 @@ void	sort_list(t_env *head)
 		ptr1 = head;
 		while (ptr1->next != lptr)
 		{
-			if (strcmp(ptr1->name, ptr1->next->name) > 0)
+			if (ft_strcmp(ptr1->name, ptr1->next->name) > 0)
 			{
 				swap(ptr1, ptr1->next);
 				swapped = 1;
@@ -62,8 +62,8 @@ void	copy_list(t_env *source, t_env **destination)
 		new = malloc(sizeof(t_env));
 		if (!new)
 			return ;
-		new->name = strdup(source->name);
-		new->value = strdup(source->value);
+		new->name = ft_strdup(source->name);
+		new->value = ft_strdup(source->value);
 		new->next = NULL;
 		if (*destination == NULL)
 			*destination = new;
@@ -94,14 +94,18 @@ void	exfree_list(t_env **head)
 	}
 }
 
-void	print_sorted_env(t_env **env)
+void	print_sorted_env(t_env **env, t_node *node)
 {
 	t_env	*curr;
 
 	curr = *env;
 	while (curr)
 	{
-		printf("declare -x %s=%s\n", curr->name, curr->value);
+		ft_putstr_fd("declare -x ", node->fd_out);
+		ft_putstr_fd(curr->name, node->fd_out);
+		ft_putchar_fd('=', node->fd_out);
+		ft_putstr_fd(curr->value, node->fd_out);
+		ft_putchar_fd('\n', node->fd_out);
 		curr = curr->next;
 	}
 }

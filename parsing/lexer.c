@@ -6,7 +6,7 @@
 /*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 12:44:58 by touahman          #+#    #+#             */
-/*   Updated: 2024/03/06 11:46:35 by touahman         ###   ########.fr       */
+/*   Updated: 2024/03/09 17:48:52 by touahman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,49 +62,47 @@ void	add_redi_to_list(t_dblst *list, t_plist *p_list)
 	p_temp = p_list->head;
 	while (p_temp)
 	{
-		if (p_temp->next && (strcmp(p_temp->str, ">") == 0
-				|| strcmp(p_temp->str, ">>") == 0))
+		if (e_temp && p_temp->next && (ft_strcmp(p_temp->str, ">") == 0
+				|| ft_strcmp(p_temp->str, ">>") == 0))
 		{
 			e_temp->fd_out = p_temp->next->fd_out;
 		}
-		if (p_temp->next && (strcmp(p_temp->str, "<") == 0
-				|| strcmp(p_temp->str, "<<") == 0))
+		else if (e_temp && p_temp->next && (ft_strcmp(p_temp->str, "<") == 0
+				|| ft_strcmp(p_temp->str, "<<") == 0))
 		{
 			e_temp->fd_in = p_temp->next->fd_in;
 		}
-		if (p_temp->next && (strcmp(p_temp->str, "|") == 0))
+		else if (p_temp->next && (ft_strcmp(p_temp->str, "|") == 0))
 			e_temp = e_temp->next;
 		p_temp = p_temp->next;
 	}
 }
 
-int	lexer(char *line, t_dblst *list, char **env)
+int	lexer(char *line, t_dblst *list, t_index *index, int *status)
 {
 	t_plist	p_list;
-	char	*fixed_line;
-	char	*p_line;
-	char	*e_line;
-	char	**str;
+	t_lexer	var;
 
 	if (!(fix_input(line)))
-		return (1);
-	fixed_line = fix_line(line);
-	if (!(check_quotes(fixed_line)))
-		return (free(fixed_line), 1);
-	p_line = fix_quotes(fixed_line);
-	p_list = tokenize_list(p_line);
+		return (*status = 258, 1);
+	var.fixed_line = fix_line(line);
+	if (!(check_quotes(var.fixed_line)))
+		return (free(var.fixed_line), *status = 1, 1);
+	var.p_line = fix_quotes(var.fixed_line);
+	p_list = tokenize_list(var.p_line);
 	if (check_syntax(&p_list))
-		return (free_slist(&p_list), free(p_line), free(fixed_line), 1);
-	expand(&p_list);
-	e_line = exec_line(&p_list);
+		return (free_slist(&p_list), free(var.p_line),
+			free(var.fixed_line), *status = 258, 1);
+	expand(&p_list, index->env_head, status);
+	var.e_line = exec_line(&p_list);
 	remove_quotes(&p_list);
-	redirections(&p_list);
-	fix_e_line(fixed_line, e_line);
-	remove_line_quotes(e_line);
-	str = ft_split(e_line, '|');
-	add_list(str, list, env);
+	redirections(&p_list, index->env_head);
+	fix_e_line(var.fixed_line, var.e_line);
+	remove_line_quotes(var.e_line);
+	var.str = ft_split(var.e_line, '|');
+	add_list(var.str, list, index->env);
 	add_spaces_back(list);
 	add_redi_to_list(list, &p_list);
-	return (free_slist(&p_list), ft_free(str), free(p_line),
-		free(fixed_line), free(e_line), 0);
+	return (free_slist(&p_list), ft_free(var.str), free(var.p_line),
+		free(var.fixed_line), free(var.e_line), 0);
 }

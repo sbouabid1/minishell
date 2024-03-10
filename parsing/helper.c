@@ -6,7 +6,7 @@
 /*   By: touahman <touahman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 12:47:03 by touahman          #+#    #+#             */
-/*   Updated: 2024/03/06 11:21:51 by touahman         ###   ########.fr       */
+/*   Updated: 2024/03/09 15:00:55 by touahman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,38 +24,31 @@ void	ft_free(char **lst)
 	}
 	free(lst);
 }
-/*
-static void	remove_extra_spaces(char *str)
-{
-	char *src;
-	char *dst;
-	int inside_s_quotes;
-	int inside_d_quotes;
 
-	src = str;
-	dst = str;
-	inside_s_quotes = 0;
-	inside_d_quotes = 0;
-	while (*src)
+static void	replace_tabs(char *str)
+{
+	t_index	var;
+
+	ft_memset(&var, 0, sizeof(var));
+	while (str[var.i])
 	{
-		if (*src == '"')
+		if (str[var.i] == '"')
 		{
-			inside_d_quotes = !inside_d_quotes;
-			*dst++ = *src++;
+			var.inside_d_quotes = !var.inside_d_quotes;
 		}
-		else if (*src == '\'')
+		else if (str[var.i] == '\'')
+			var.inside_s_quotes = !var.inside_s_quotes;
+		else if (!var.inside_d_quotes && !var.inside_s_quotes
+			&& str[var.i] == '\t')
 		{
-			inside_s_quotes = !inside_s_quotes;
-			*dst++ = *src++;
+			str[var.j++] = ' ';
+			var.i++;
+			continue ;
 		}
-		else if ((inside_d_quotes || inside_s_quotes)
-			|| (*src != ' ' || (*(src + 1) != ' ' && *(src + 1) != '\0')))
-			*dst++ = *src++;
-		else
-			src++;
+		str[var.j++] = str[var.i++];
 	}
-	*dst = '\0';
-}*/
+	str[var.j] = '\0';
+}
 
 static void	remove_extra_spaces(char *str)
 {
@@ -85,18 +78,6 @@ static void	remove_extra_spaces(char *str)
 
 void	epur_str(char *str)
 {
-	char	*end;
-
+	replace_tabs(str);
 	remove_extra_spaces(str);
-	while (*str == ' ')
-		str++;
-	end = str;
-	while (*end != '\0')
-		end++;
-	end--;
-	while (end > str && *end == ' ')
-	{
-		*end = '\0';
-		end--;
-	}
 }
